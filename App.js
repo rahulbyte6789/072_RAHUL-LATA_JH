@@ -1,158 +1,71 @@
-import axios from "axios";
-import{useEffect, useState} from "react";
+import { useState } from "react";
+import "./App.css";
 
-export default function App(){
-  return(
+export default function App() {
+  return (
     <>
-    <sender />
-    <br/>
-    <br/>
+      <header className="row bg-secondary d-flex d-flex align-items-center">
+        <h1 className="col-4 d-flex text-light ">Instant ChatBox</h1>
+        <p className="col text-light">
+          by ( Rahul Lata ) ( 210940520072)
+        </p>
+      </header>
+
+      <MyComponent />
     </>
   );
 }
 
-function MyComponent(){
-  const[username, setUsername]=useState("");
-  const[email, setemail]=useState("");
-  const[password, setpassword] = useState("");
-  const[list, setList]=useState([]);
-  
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
+function MyComponent() {
+  const [message, setMessage] = useState("");
+  const [list, setList] = useState([]);
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+  function handleMessage(e) {
+    setMessage(e.target.value);
+  }
 
-  const handleemailChange = (e) => {
-    setPassword(e.target.value);
-  };
+  function send() {
+    if (message === "") {
+      alert("Invalid message!!!");
+    } else {
+      const newList = [message, ...list];
 
-  const addUser = async() => {
-    if (username == "" || password ==""){
-      alert("Validation fails");
-      return;
+      setList(newList);
+      setMessage("");
     }
+  }
 
-    const url = "http://localhost:4000/add-message";
-    const data ={
-      username:username,
-      password:password,
-      email:email
+  return (
+    <div className="mx-4">
+      <div className="row">
+        <textarea
+          placeholder="Lets chat here..."
+          className=" col form-control form-control-lg mt-4 textField"
+          type="textarea"
+          rows="4"
+          value={message}
+          onChange={handleMessage}
+        />
 
-    };
-
-    //Ajax 
-    await axios.post(url,data);
-    const newList = [data, ...list];
-    setList(newList);
-
-    
-    setusername("");
-    setPassword("");
-    setemail("");
-    };
-
-    const getUser1= async() => {
-      const url="http://localhost:4000/users";
-      const result = await axios.get(url);
-
-      const list = result.data;
-      const newList = [...list];
-      setList(newList);
-    };
-
-    const getUser= async() => {
-      const url="http://localhost:4000/users";
-      const result = await axios.fetch(url);
-      const list = await result.json();
-
-      const newList = [...list];
-      setList(newList);
-    };
-
-    //like constructor
-    useEffect(() => getUser(),[]);
-
-    return(
-      <div>
-        <h2 className="bg-dark text-light p-3">User Registration</h2>
-        <div>
-          <input
-            className="form-control form-control-lg mb-l "
-            type="text"
-            id=""
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="Enter Username"
-
-          />
-        </div>
-
-       <div>
-          <input
-            className="form-control form-control-lg mb-l "
-            type="text"
-            id=""
-            value={password}
-            onChange={handlePasswordChange}
-            placeholder="Enter Password"
-
-          />
+        <input
+          className="col-2 mt-4 mx-2 sendBtn"
+          type="button"
+          value="SEND"
+          onClick={send}
+        />
       </div>
-    
-      <div>
-          <input
-            className="form-control form-control-lg mb-l "
-            type="text"
-            id=""
-            value={email}
-            onChange={handleEmailChange}
-            placeholder="Enter Email"
 
-          />
-      </div>
-      <input
-        className="btn btn-secondary w-100 "
-        type = "button"
-        name=""
-        value="Register"
-        onClick={addUser}
-      
-      
-      
-      
-      />
+      {list.map((item, index) => (
+        <>
+          <div
+            key={index}
+            className="alert alert-secondary fs-4 mt-3 text-start"
+          >
+            {item}
+          </div>
 
-     <h3 className="bg-dark text-light mt-1 p-3">User List</h3>
-     {
-       list.map((item, index)=>(
-        <div key ={index} className="alert alert-secondary fs-4">
-          {item.username}{item.pssword}{item.email}
-</div>
-       ))}
-</div>
-    
-    
-    
-    
-    
-    
-    
-    )
-
-
-}
-
-
-function sender()
-{
-  const[sMessage, setsMessage]=useState("");
-  const[list, setList]=useState([]),
-
-  const handleUsernameChange = (e) => {
-    setsMessage(e.target.value);
-  };
-
+        </>
+      ))}
+    </div>
+  )
 }
