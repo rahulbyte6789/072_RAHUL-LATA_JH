@@ -1,0 +1,12 @@
+
+SET SQL_SAFE_UPDATES=0;
+CREATE DATABASE PROJECT1;
+USE PROJECT1;
+alter user 'root'@'localhost' identified with mysql_native_password by 'cdac';
+
+create table message(
+sender varchar(50),
+receiver varchar(50),
+msg varchar(1000)
+);
+select * from message;
